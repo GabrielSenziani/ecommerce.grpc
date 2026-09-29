@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message EstoqueRequest {
+    int32 produtoId = 1;
+    int32 quantidadeDesejada = 2;
+}
+
+message EstoqueResponse {
+    bool disponivel = 1;
+    int32 produtoId = 2;
+    int32 quantidadeDisponivel = 3;
+}
+
+service EstoqueService {
+    rpc VerificaEstoque(EstoqueRequest) returns (EstoqueResponse);
+}
