@@ -1,6 +1,4 @@
-import Database from "better-sqlite3";
-
-const db = new Database("grpc-ecommerce/src/database/ecommerce.db");
+import { db } from "./connection.js";
 
 db.pragma("foreign_keys = ON");
 

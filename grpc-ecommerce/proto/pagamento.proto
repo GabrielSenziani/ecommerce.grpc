@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+message PagamentoRequest {
+    int32 produtoId = 1;
+    int32 quantidadeDesejada = 2;
+    int32 valorPago = 3;
+}
+
+message PagamentoResponse {
+    int32 produtoId = 1;
+    int32 valorEsperado = 2;
+    int32 valorPagoPeloUsuario = 3;
+    bool compraAprovada = 4;
+}
+
+service PagamentoService {
+    rpc VerificaPagamento(PagamentoRequest) returns (PagamentoResponse);
+}
