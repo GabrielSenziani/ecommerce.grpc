@@ -1,16 +1,12 @@
 import { readFile, readdir } from "fs/promises";
-import { db } from "../database/connection.js";
 import { criaTabelaDeControle } from "./schemaMigration.js";
+import { DatabaseError } from "../errors/errors.js";
 import path from "path";
-import { fileURLToPath } from 'url';
 
-async function iniciarMigration() {
-    criaTabelaDeControle()
+export async function iniciarMigration(db, caminhoDasMigrations) {
+    criaTabelaDeControle(db)
     try {
-      const __dirname = path.dirname(fileURLToPath(import.meta.url));
-      const pastaMigrations = __dirname
-
-      const todosOsArquivos = await readdir(pastaMigrations)
+      const todosOsArquivos = await readdir(caminhoDasMigrations)
 
       const arquivosSqlOrdenados = todosOsArquivos
       .filter(nome => nome.endsWith(".sql"))
@@ -34,7 +30,7 @@ async function iniciarMigration() {
          console.log(`Pulando... A migration "${nomeArquivo}", já foi executada`)
          continue;
         }
-        const caminhoCompleto = path.join(pastaMigrations, nomeArquivo)
+        const caminhoCompleto = path.join(caminhoDasMigrations, nomeArquivo)
         const sql = await readFile(caminhoCompleto, "utf-8")
 
         db.exec(sql)
@@ -45,8 +41,6 @@ async function iniciarMigration() {
      
 
     } catch (erro) {
-     console.error("Erro ao executar a migration", erro.message)
+     throw new DatabaseError("Erro ao executar migrations", erro)
     }
 }
-
-iniciarMigration();
