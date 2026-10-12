@@ -9,6 +9,7 @@ message EstoqueResponse {
     bool disponivel = 1;
     int32 produtoId = 2;
     int32 quantidadeDisponivel = 3;
+    int32 precoDoProdutoEmCentavos = 4;
 }
 
 service EstoqueService {

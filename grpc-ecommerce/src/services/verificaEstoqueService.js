@@ -13,7 +13,7 @@ export function verificaEstoque(produtoId, quantidadeDesejada) {
     return {
         disponivel: disponivel,
         produtoId: produtoId,
-        quantidadeDisponivel: produto.QuantidadeDisponivel
+        quantidadeDisponivel: produto.QuantidadeDisponivel,
+        precoDoProdutoEmCentavos: produto.PrecoCentavos
     }
-
 }

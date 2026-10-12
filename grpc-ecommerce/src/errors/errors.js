@@ -11,3 +11,10 @@ export class DatabaseError extends Error {
         this.name = "DatabaseError"
     }
 }
+
+export class InvalidArgumentError extends Error {
+    constructor(mensagem) {
+        super(mensagem);
+        this.name = "InvalidArgumentError"
+    }
+}

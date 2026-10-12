@@ -3,7 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { db } from "./database/connection.js";
 import { getGrpcService } from "./helpers/encontraPacote.js";
-import { verificaEstoqueHandler } from "./handlers/estoqueHandler.js";
+import { verificaEstoqueHandler} from "./handlers/estoqueHandler.js";
+import { verificaPagamentoHandler } from "./handlers/pagamentoHandler.js";
 import { iniciarMigration } from "./migrations/executaMigration.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -14,6 +15,11 @@ const estoqueService = getGrpcService(
   "../../proto/estoque.proto",
   "EstoqueService",
 );
+
+const pagamentoService = getGrpcService(
+  "../../proto/pagamento.proto",
+  "PagamentoService",
+)
 
 async function iniciarServidor() {
   try {
@@ -26,6 +32,10 @@ async function iniciarServidor() {
     servidor.addService(estoqueService, {
       VerificaEstoque: verificaEstoqueHandler,
     });
+
+    servidor.addService(pagamentoService, {
+      VerificaPagamento: verificaPagamentoHandler,
+    })
 
     servidor.bindAsync(
       "0.0.0.0:50051",

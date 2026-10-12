@@ -22,6 +22,12 @@ export async function iniciarMigration(db, caminhoDasMigrations) {
             INSERT INTO TabelaMigrations (Nome)
             VALUES (?)    
         `);
+
+    const executaMigrationUnica = db.transaction((sql, nomeArquivo) => {
+        db.exec(sql)
+        insereHistorico.run(nomeArquivo)
+    })
+    
     for (const nomeArquivo of arquivosSqlOrdenados) {
 
         const migrationJaExecutada = busca.get(nomeArquivo)
@@ -33,11 +39,13 @@ export async function iniciarMigration(db, caminhoDasMigrations) {
         const caminhoCompleto = path.join(caminhoDasMigrations, nomeArquivo)
         const sql = await readFile(caminhoCompleto, "utf-8")
 
-        db.exec(sql)
+        console.log(`Executando migration: ${nomeArquivo}...`);
 
-        insereHistorico.run(nomeArquivo)
+        executaMigrationUnica(sql, nomeArquivo)
+
+        console.log(`migration: "${nomeArquivo}" aplicada com sucesso.`);
     }
-    console.log("Processo de migrations finalizada com sucesso")
+    console.log("Processo de migrations finalizada com sucesso.")
      
 
     } catch (erro) {
