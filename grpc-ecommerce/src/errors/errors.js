@@ -18,3 +18,10 @@ export class InvalidArgumentError extends Error {
         this.name = "InvalidArgumentError"
     }
 }
+
+export class BusinessError extends Error {
+    constructor(mensagem) {
+        super(mensagem);
+        this.name = "BusinessError"
+    }
+}

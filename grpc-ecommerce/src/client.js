@@ -30,21 +30,3 @@ async function rodarTestePagamento() {
 }
 
 rodarTestePagamento();
-
-async function rodarTesteRapido() {
-    let produtoId = 1;
-    let quantidadeDesejada = 3;
-
-    try {
-    const valorDoPagamento = await verificaDisponibilidadeEstoque(produtoId, quantidadeDesejada)
-
-    console.log("Sucesso! O pagamento é válido.");
-    console.log(`Valor total a ser pago em centavos: ${valorDoPagamento}`)
-
-} catch (erro) {
-    console.log("Teste falhou, erro no pagamento:", erro.message)
-}
-}
-
-
-rodarTesteRapido()

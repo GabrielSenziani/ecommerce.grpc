@@ -1,6 +1,7 @@
 //(id, quantidadeDesejada)
 //return com só o valor do pagamento
 //resolve se o pagamento for valido, reject se não
+import { DatabaseError, NotFoundError } from "../errors/errors.js";
 import { getGrpcClient } from "../helpers/encontraCliente.js";
 import grpc from "@grpc/grpc-js"
 
@@ -19,16 +20,20 @@ export function verificaDisponibilidadeEstoque(produtoId, quantidadeDesejada) {
 
     return new Promise((resolve, reject) => {
       client.VerificaEstoque(request, (erro, resposta) => {
+
         if (erro) {
-            return reject(new Error(`Falha ao se comunicar o gRPC de Estoque: ${erro.message}`))
-        }
-        if (!resposta.disponivel) {
-            return reject(new Error(`Produto ID ${produtoId} não possui estoque suficiente para a quantidade desejada.`));
+         if (erro.code === grpc.status.NOT_FOUND) {
+            return reject(new NotFoundError(erro.details || `Produto ID ${produtoId} não encontrado.`))
         }
 
-        const valorTotalEmCentavos = resposta.precoDoProdutoEmCentavos * quantidadeDesejada
+        return reject (new DatabaseError(`Falha ao se comunicar com o gRPC de Estoque: ${erro.message}`, erro));
+        }        
+        const valorTotalEmCentavos = (resposta.precoDoProdutoEmCentavos || 0) * quantidadeDesejada;
 
-        resolve(valorTotalEmCentavos)
+        resolve({
+            disponivel: resposta.disponivel,
+            valorTotalEmCentavos: valorTotalEmCentavos
+        })
       })
     })
 }

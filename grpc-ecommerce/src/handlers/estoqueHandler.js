@@ -14,7 +14,7 @@ export function verificaEstoqueHandler(call, callback) {
         if (erro instanceof NotFoundError) {
             callback({ 
                 code: grpc.status.NOT_FOUND, 
-                message: "Não foi possivel encontrar o produto"
+                message: erro.message
             })
         } else if (erro instanceof DatabaseError) {
             callback({ 
