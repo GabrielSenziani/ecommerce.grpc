@@ -326,7 +326,7 @@ execução e ao controle dessas alterações.
 ### Tabela de pagamentos
 
 O repositório de pagamento registra os dados da transação com os
-seguintes campos:
+seguintes campos, essa tabela foi adicionada por meio da migration `002-adiciona-tabela-pagamento.sql`:
 
   Campo                      Descrição
   -------------------------- -----------------------------------------------
@@ -414,14 +414,14 @@ entrada da aplicação.
 
 Para executar o projeto:
 
-1.  Instale as dependências com o gerenciador de pacotes utilizado.
-2.  Configure ou inicialize o banco SQLite e aplique as migrations
-    necessárias.
-3.  Inicie o servidor gRPC.
-4.  Execute o cliente para enviar requisições aos serviços.
+1.  Instale as dependências com npm install.
+2.  Configure o banco SQLite e aplique as migrations necessárias.
+3.  Inicie o servidor gRPC com node src/server.js.
+4.  Em outro terminal, execute o cliente com node src/client.js para enviar requisições aos serviços.
 
-Consulte os scripts definidos em `package.json` para obter os comandos
-exatos de instalação, inicialização e execução.
+As migrations estão localizadas em src/migrations/. Verifique a configuração do banco e a ordem de execução das migrations antes de iniciar a aplicação.
+
+Observação: o package.json ainda não possui scripts específicos para inicialização do servidor e do cliente, por isso os arquivos são executados diretamente pelo Node.js.
 
 ------------------------------------------------------------------------
 
